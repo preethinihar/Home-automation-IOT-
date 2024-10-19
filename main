@@ -1,0 +1,81 @@
+#define relay1 7   // Connect relay1 to pin 7
+#define relay2 8   // Connect relay2 to pin 8
+#define relay3 9  // Connect relay3 to pin 9
+#define relay4 10  // Connect relay4 to pin 10
+
+String voice;
+
+void setup() {
+  Serial.begin(9600);            // Set rate for communicating with phone
+  pinMode(relay1, OUTPUT);       // Set relay1 as an output
+  pinMode(relay2, OUTPUT);       // Set relay2 as an output
+  pinMode(relay3, OUTPUT);       // Set relay3 as an output
+  pinMode(relay4, OUTPUT);       // Set relay4 as an output
+  
+  // Switch all relays off initially
+  digitalWrite(relay1, HIGH);
+  digitalWrite(relay2, HIGH);
+  digitalWrite(relay3, HIGH);
+  digitalWrite(relay4, HIGH);
+}
+
+void loop() {
+  while (Serial.available()) { // Check if there is an available byte to read
+    delay(10); // Delay added to make things stable 
+    char c = Serial.read(); // Conduct a serial read
+    if (c == '#') { break; } // Exit the loop when the # is detected after the word
+    voice += c; // Shorthand for voice = voice + c
+  }
+  
+  if (voice.length() > 0) {
+    // Commands for controlling the relays
+    if (voice == "*turn on Bell") {           
+      digitalWrite(relay1, LOW);   // Relay 1 ON
+    }
+    else if (voice == "*turn off Bell") {      
+      digitalWrite(relay1, HIGH);   // Relay 1 OFF
+    }
+    else if (voice == "*turn on light b") {           
+      digitalWrite(relay2, LOW);   // Relay 2 ON
+    }
+    else if (voice == "*turn off light b") {      
+      digitalWrite(relay2, HIGH);   // Relay 2 OFF
+    }
+    else if (voice == "*turn on light 3") {           
+      digitalWrite(relay3, LOW);   // Relay 3 ON
+    }
+    else if (voice == "*turn off light 3") {      
+      digitalWrite(relay3, HIGH);   // Relay 3 OFF
+    }
+    else if (voice == "*turn on light 4") {           
+      digitalWrite(relay4, LOW);   // Relay 4 ON
+    }
+    else if (voice == "*turn off light 4") {      
+      digitalWrite(relay4, HIGH);   // Relay 4 OFF
+    }
+    else if (voice == "*turn on light for") {           
+      digitalWrite(relay4, LOW);   // Relay 4 ON
+    }
+    else if (voice == "*turn off light for") {      
+      digitalWrite(relay4, HIGH);   // Relay 4 OFF
+    }
+
+    voice = ""; // Reset the variable after processing
+  }
+}
+
+// Function for turning OFF all relays
+void switchalloff() {
+  digitalWrite(relay1, HIGH);
+  digitalWrite(relay2, HIGH);
+  digitalWrite(relay3, HIGH);
+  digitalWrite(relay4, HIGH);
+}
+
+// Function for turning ON all relays
+void switchallon() {
+  digitalWrite(relay1, LOW);
+  digitalWrite(relay2, LOW);
+  digitalWrite(relay3, LOW);
+  digitalWrite(relay4, LOW);
+}
